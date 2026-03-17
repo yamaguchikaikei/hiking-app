@@ -874,8 +874,6 @@ function StatsView({ events, members, onBack }) {
     return { ...m, attended: attended.length, totalDist, totalElev, maxElev };
   }).sort((a, b) => b.totalElev - a.totalElev);
 
-  const topElev = memberStats.length > 0 ? memberStats[0].totalElev : 1;
-
   const RANK_COLORS = ["#c9a84c", "#8b9da8", "#8b5e3c", THEME.accent, THEME.textLight];
 
   return (
