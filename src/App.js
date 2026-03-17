@@ -251,7 +251,7 @@ function ProfileSetupView({ user, onComplete }) {
 function HomeView({ events, members, user, onSelectEvent, onAddEvent, onGoMembers }) {
   const sortedEvents = [...events].sort((a, b) => new Date(a.date) - new Date(b.date));
   const upcoming = sortedEvents.filter(e => new Date(e.date) >= new Date());
-  const past = sortedEvents.filter(e => new Date(e.date) < new Date() && e.result);
+  const past = sortedEvents.filter(e => new Date(e.date) < new Date());
   const currentMember = members.find(m => m.id === user?.userId);
   const totalDist = past.reduce((s, e) => s + (e.result?.distance || 0), 0);
 
@@ -863,12 +863,15 @@ function getMilestoneInfo(totalElev) {
 function StatsView({ events, members, onBack }) {
   const [tab, setTab] = useState("elevation"); // "elevation" | "record"
   const completedEvents = events.filter(e => e.result);
+  const pastEvents = events.filter(e => new Date(e.date) < new Date());
 
   const memberStats = members.map(m => {
-    const attended = completedEvents.filter(e => e.attendance[m.id] === "○");
-    const totalDist = attended.reduce((s, e) => s + (e.result?.distance || 0), 0);
-    const totalElev = attended.reduce((s, e) => s + (e.result?.maxElevation || 0), 0);
-    const maxElev = Math.max(0, ...attended.map(e => e.result?.maxElevation || 0));
+    // 出欠で「参加」または未回答も含む過去の登山（出欠が×以外）
+    const attended = pastEvents.filter(e => e.attendance[m.id] !== "×");
+    // 実績があれば実績の値、なければ登録時の標高・距離を使用
+    const totalDist = attended.reduce((s, e) => s + (e.result?.distance || e.distance || 0), 0);
+    const totalElev = attended.reduce((s, e) => s + (e.result?.maxElevation || e.elevation || 0), 0);
+    const maxElev = Math.max(0, ...attended.map(e => e.result?.maxElevation || e.elevation || 0));
     return { ...m, attended: attended.length, totalDist, totalElev, maxElev };
   }).sort((a, b) => b.totalElev - a.totalElev);
 
@@ -993,13 +996,13 @@ function StatsView({ events, members, onBack }) {
 
         {/* ===== 登山履歴 ===== */}
         {tab === "record" && (
-          completedEvents.length === 0 ? (
+          pastEvents.length === 0 ? (
             <div style={{ textAlign: "center", padding: 32, color: THEME.textLight }}>
               <div style={{ fontSize: 40, marginBottom: 10 }}>📋</div>
               <div style={{ fontWeight: 700 }}>まだ記録がありません</div>
             </div>
           ) : (
-            [...completedEvents].reverse().map(ev => (
+            [...pastEvents].reverse().map(ev => (
               <div key={ev.id} style={{ background: THEME.card, borderRadius: 14, padding: 14, marginBottom: 8, boxShadow: "0 1px 6px rgba(0,0,0,0.05)", border: `1px solid ${THEME.border}` }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                   <div>
@@ -1010,9 +1013,9 @@ function StatsView({ events, members, onBack }) {
                     </div>
                   </div>
                   <div style={{ textAlign: "right" }}>
-                    <div style={{ fontWeight: 800, color: THEME.accent, fontSize: 15 }}>🏔️ {ev.result.maxElevation?.toLocaleString()}m</div>
-                    <div style={{ fontSize: 12, color: THEME.textLight }}>{ev.result.distance}km</div>
-                    <div style={{ fontSize: 11, color: THEME.textLight }}>{Math.floor((ev.result.duration || 0) / 60)}h{(ev.result.duration || 0) % 60 > 0 ? (ev.result.duration % 60) + "m" : ""}</div>
+                    <div style={{ fontWeight: 800, color: THEME.accent, fontSize: 15 }}>🏔️ {(ev.result?.maxElevation || ev.elevation || 0).toLocaleString()}m</div>
+                    <div style={{ fontSize: 12, color: THEME.textLight }}>{ev.result?.distance || ev.distance || "---"}km</div>
+                    <div style={{ fontSize: 11, color: THEME.textLight }}>{ev.result ? Math.floor((ev.result.duration || 0) / 60) + "h" + ((ev.result.duration || 0) % 60 > 0 ? (ev.result.duration % 60) + "m" : "") : "---"}</div>
                   </div>
                 </div>
               </div>
