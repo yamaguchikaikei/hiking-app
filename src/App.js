@@ -1,12 +1,10 @@
 import { useState, useEffect } from "react";
 import liff from "@line/liff";
 
-const LIFF_ID = "YOUR_LIFF_ID_HERE";
+const LIFF_ID = "2009492341-pX7zYyb0";
 const CHANNEL_ACCESS_TOKEN = "YOUR_CHANNEL_ACCESS_TOKEN_HERE";
-
-// ★ 新しいSupabaseプロジェクト作成後に書き換えてください
-const SUPABASE_URL = "YOUR_SUPABASE_URL_HERE";
-const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY_HERE";
+const SUPABASE_URL = "https://mdvjorchwyceozkmiude.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1kdmpvcmNod3ljZW96a21pdWRlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzNjEzMTEsImV4cCI6MjA4ODkzNzMxMX0.HpoMVzZwhGtHW8vCsGQRw3oFjmVag-B1ygEBCwQkXXE";
 
 // ========== Supabase APIヘルパー ==========
 async function sbFetch(path, options = {}) {
