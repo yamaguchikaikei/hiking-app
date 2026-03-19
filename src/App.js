@@ -185,7 +185,9 @@ function formatDate(d) {
 function LoadingScreen() {
   return (
     <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", background: `linear-gradient(160deg, ${THEME.dark}, ${THEME.mid}, #1a3a2a)`, color: "#fff", fontFamily: "'Noto Sans JP', sans-serif" }}>
-      <div style={{ fontSize: 64, marginBottom: 20, animation: "float 2s ease-in-out infinite" }}>🏔️</div>
+      <div style={{ width: 140, height: 140, marginBottom: 24, animation: "float 2s ease-in-out infinite", borderRadius: "50%", overflow: "hidden", boxShadow: "0 4px 24px rgba(0,0,0,0.4)" }}>
+        <img src="/東大阪__1_.png" alt="ロゴ" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+      </div>
       <div style={{ fontWeight: 700, fontSize: 18, letterSpacing: 2 }}>読み込み中...</div>
       <style>{`@keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }`}</style>
     </div>
@@ -258,16 +260,20 @@ function HomeView({ events, members, user, onSelectEvent, onAddEvent, onGoMember
   return (
     <div style={{ ...commonStyles, paddingBottom: 80 }}>
       <div style={{ background: `linear-gradient(160deg, ${THEME.dark} 0%, ${THEME.mid} 60%, #2a4a3a 100%)`, padding: "28px 20px 24px", color: "#fff", position: "relative", overflow: "hidden" }}>
-        <div style={{ position: "absolute", top: -20, right: -20, fontSize: 120, opacity: 0.05 }}>⛰️</div>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
-          <div>
-            <div style={{ fontSize: 11, opacity: 0.6, letterSpacing: 2, marginBottom: 4 }}>HIGASHI-OSAKA BRANCH</div>
-            <div style={{ fontSize: 24, fontWeight: 900, letterSpacing: 1 }}>🏔️ 東大阪支部山登り同好会</div>
-            <div style={{ opacity: 0.6, fontSize: 13, marginTop: 4 }}>全{members.length}名のメンバー</div>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+            <div style={{ width: 56, height: 56, borderRadius: "50%", overflow: "hidden", border: "2px solid rgba(255,255,255,0.3)", flexShrink: 0 }}>
+              <img src="/東大阪__1_.png" alt="ロゴ" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+            </div>
+            <div>
+              <div style={{ fontSize: 10, opacity: 0.6, letterSpacing: 2, marginBottom: 2 }}>HIGASHI-OSAKA BRANCH</div>
+              <div style={{ fontSize: 20, fontWeight: 900, letterSpacing: 1 }}>東大阪支部山登り同好会</div>
+              <div style={{ opacity: 0.6, fontSize: 12, marginTop: 2 }}>全{members.length}名のメンバー</div>
+            </div>
           </div>
           {currentMember && (
             <div style={{ textAlign: "center" }}>
-              <div style={{ fontSize: 32 }}>{currentMember.emoji}</div>
+              <div style={{ fontSize: 28 }}>{currentMember.emoji}</div>
               <div style={{ fontSize: 11, opacity: 0.7 }}>{currentMember.name}</div>
             </div>
           )}
